@@ -2,6 +2,11 @@
 // Set maximum execution time to unlimited
 set_time_limit(0);
 
+// Your Shopify store details
+$storeUrl = "your_shopify_store_url";  // Replace with your actual Shopify store URL
+$apiKey = "your_api_key";  // Replace with your actual Shopify API key
+$password = "your_api_password";  // Replace with your actual Shopify API password
+
 // Initialize cURL
 $ch = curl_init();
 
@@ -11,7 +16,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt(
     $ch,
     CURLOPT_URL,
-    "https://xxxxxx:shpat_xxxxx@shopify_store_url.com/admin/api/2023-07/products.json?limit=250&fields=id,variants"
+    "https://{$apiKey}:{$password}@{$storeUrl}/admin/api/2023-07/products.json?limit=250&fields=id,variants"
 );
 
 // Execute cURL and store result
@@ -48,7 +53,7 @@ foreach ($variants_ids as $variant_id) {
     $ch_variant = curl_init();
 
     // Construct variant API endpoint
-    $site_variant = "https://shopify_store_url.com/admin/api/2023-07/variants/{$variant_id}.json?fields=id,product_id,inventory_item_id";
+    $site_variant = "https://{$storeUrl}/admin/api/2023-07/variants/{$variant_id}.json?fields=id,product_id,inventory_item_id";
 
     // Set cURL options for variant request
     curl_setopt($ch_variant, CURLOPT_RETURNTRANSFER, true);
@@ -72,7 +77,7 @@ foreach ($variants_ids as $variant_id) {
     $ch_inventory = curl_init();
 
     // Construct inventory item API endpoint
-    $site_inventory_item = "https://shopify_store_url.com/admin/api/2023-07/inventory_items/{$inventory_item_id}.json";
+    $site_inventory_item = "https://{$storeUrl}/admin/api/2023-07/inventory_items/{$inventory_item_id}.json";
 
     // Set cURL options for inventory item request
     curl_setopt($ch_inventory, CURLOPT_RETURNTRANSFER, true);
@@ -95,7 +100,7 @@ foreach ($variants_ids as $variant_id) {
     $ch_update_metafield = curl_init();
 
     // Construct metafield API endpoint
-    $url = "https://lovebriks-3.myshopify.com/admin/api/2023-07/variants/{$variant_id}/metafields.json";
+    $url = "https://{$storeUrl}/admin/api/2023-07/variants/{$variant_id}/metafields.json";
 
     // Prepare data for updating metafield
     $data = [
@@ -112,7 +117,7 @@ foreach ($variants_ids as $variant_id) {
     curl_setopt($ch_update_metafield, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch_update_metafield, CURLOPT_URL, $url);
     curl_setopt($ch_update_metafield, CURLOPT_HTTPHEADER, [
-        "X-Shopify-Access-Token: shpat_xxxxx",
+        "X-Shopify-Access-Token: {$password}",
         "Content-Type: application/json",
     ]);
 
